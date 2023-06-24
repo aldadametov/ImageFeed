@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dyU-Ye-Eqk">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -91,9 +91,58 @@
             </objects>
             <point key="canvasLocation" x="46.564885496183201" y="-2.1126760563380285"/>
         </scene>
+        <!--Profile-->
+        <scene sceneID="Jta-7G-voO">
+            <objects>
+                <viewController title="Profile" id="dyU-Ye-Eqk" customClass="ProfileViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ANO-KC-46p">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile_Photo" translatesAutoresizingMaskIntoConstraints="NO" id="s34-y9-Mz5">
+                                <rect key="frame" x="16" y="76" width="70" height="70"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Екатерина Новикова" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CQz-3G-HPj">
+                                <rect key="frame" x="16" y="154" width="166.66666666666666" height="20"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="@ekaterina_nov" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c45-0g-gov">
+                                <rect key="frame" x="16" y="180" width="99" height="15.666666666666686"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" red="0.68235294117647061" green="0.68627450980392157" blue="0.70588235294117641" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello, world!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mDc-oU-ce3">
+                                <rect key="frame" x="16" y="206" width="76" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Qxi-FK-COZ"/>
+                        <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="c45-0g-gov" firstAttribute="leading" secondItem="Qxi-FK-COZ" secondAttribute="leading" constant="16" id="08n-DI-IpR"/>
+                            <constraint firstItem="CQz-3G-HPj" firstAttribute="top" secondItem="ANO-KC-46p" secondAttribute="top" constant="154" id="1rC-li-d3Q"/>
+                            <constraint firstItem="s34-y9-Mz5" firstAttribute="leading" secondItem="Qxi-FK-COZ" secondAttribute="leading" constant="16" id="ELj-c5-Q6h"/>
+                            <constraint firstItem="s34-y9-Mz5" firstAttribute="top" secondItem="ANO-KC-46p" secondAttribute="top" constant="76" id="KdB-uY-Jle"/>
+                            <constraint firstItem="mDc-oU-ce3" firstAttribute="top" secondItem="ANO-KC-46p" secondAttribute="top" constant="206" id="VY9-SB-ap1"/>
+                            <constraint firstItem="CQz-3G-HPj" firstAttribute="leading" secondItem="Qxi-FK-COZ" secondAttribute="leading" constant="16" id="gd2-2K-0TQ"/>
+                            <constraint firstItem="mDc-oU-ce3" firstAttribute="leading" secondItem="Qxi-FK-COZ" secondAttribute="leading" constant="16" id="vED-x0-3fA"/>
+                            <constraint firstItem="c45-0g-gov" firstAttribute="top" secondItem="ANO-KC-46p" secondAttribute="top" constant="180" id="yF7-sl-tAz"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="izZ-wZ-buu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="896.94656488549617" y="-2.1126760563380285"/>
+        </scene>
     </scenes>
     <resources>
         <image name="0" width="200" height="132"/>
         <image name="like_button_on" width="42" height="42"/>
+        <image name="profile_Photo" width="70" height="70"/>
     </resources>
 </document>

@@ -16,7 +16,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <tabBarAppearance key="standardAppearance">
                             <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         </tabBarAppearance>
@@ -42,7 +41,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" rowHeight="162" id="F8w-3I-fFV" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" rowHeight="162" id="F8w-3I-fFV" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="414" height="162"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="F8w-3I-fFV" id="0E1-6v-EqP">
@@ -122,68 +121,10 @@
                     <view key="view" contentMode="scaleToFill" id="ANO-KC-46p">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile_Photo" translatesAutoresizingMaskIntoConstraints="NO" id="s34-y9-Mz5">
-                                <rect key="frame" x="16" y="80" width="70" height="70"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="70" id="EBZ-8h-Uft"/>
-                                    <constraint firstAttribute="width" constant="70" id="RFB-rx-yVx"/>
-                                </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Екатерина Новикова" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CQz-3G-HPj" userLabel="nameLabel">
-                                <rect key="frame" x="16" y="158" width="227.5" height="27"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="@ekaterina_nov" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c45-0g-gov" userLabel="loginNameLabel">
-                                <rect key="frame" x="16" y="204" width="99" height="15.666666666666686"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" red="0.68235294117647061" green="0.68627450980392157" blue="0.70588235294117641" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello, world!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mDc-oU-ce3" userLabel="descriptionLabel">
-                                <rect key="frame" x="16" y="217" width="76" height="16"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BQ9-DW-MXr" userLabel="logoutButton">
-                                <rect key="frame" x="354" y="114" width="23" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="Exit">
-                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration"/>
-                                </state>
-                                <connections>
-                                    <action selector="didTapLogoutButton:" destination="dyU-Ye-Eqk" eventType="touchUpInside" id="vm6-XO-9zY"/>
-                                </connections>
-                            </button>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Qxi-FK-COZ"/>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="c45-0g-gov" firstAttribute="leading" secondItem="CQz-3G-HPj" secondAttribute="leading" id="08n-DI-IpR"/>
-                            <constraint firstItem="mDc-oU-ce3" firstAttribute="leading" secondItem="c45-0g-gov" secondAttribute="leading" id="A1t-Th-ke3"/>
-                            <constraint firstItem="s34-y9-Mz5" firstAttribute="leading" secondItem="Qxi-FK-COZ" secondAttribute="leading" constant="16" id="ELj-c5-Q6h"/>
-                            <constraint firstItem="s34-y9-Mz5" firstAttribute="top" secondItem="Qxi-FK-COZ" secondAttribute="top" constant="32" id="KdB-uY-Jle"/>
-                            <constraint firstItem="BQ9-DW-MXr" firstAttribute="top" secondItem="Qxi-FK-COZ" secondAttribute="top" constant="55" id="OIq-FR-xvZ"/>
-                            <constraint firstItem="BQ9-DW-MXr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="s34-y9-Mz5" secondAttribute="trailing" id="Ta0-ba-5ae"/>
-                            <constraint firstItem="c45-0g-gov" firstAttribute="top" secondItem="CQz-3G-HPj" secondAttribute="bottom" constant="8" id="caf-Ox-7eA"/>
-                            <constraint firstItem="mDc-oU-ce3" firstAttribute="top" secondItem="c45-0g-gov" secondAttribute="bottom" constant="8" id="fjQ-5W-tVU"/>
-                            <constraint firstItem="CQz-3G-HPj" firstAttribute="leading" secondItem="Qxi-FK-COZ" secondAttribute="leading" constant="16" id="gd2-2K-0TQ"/>
-                            <constraint firstItem="CQz-3G-HPj" firstAttribute="top" secondItem="s34-y9-Mz5" secondAttribute="bottom" constant="8" id="ptE-gE-9O8"/>
-                            <constraint firstItem="Qxi-FK-COZ" firstAttribute="trailing" secondItem="BQ9-DW-MXr" secondAttribute="trailing" constant="16" id="tUD-2R-4eg"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="MjG-8Z-rrn"/>
-                    <connections>
-                        <outlet property="avatarImageView" destination="s34-y9-Mz5" id="eKa-qt-hRn"/>
-                        <outlet property="descriptionLabel" destination="mDc-oU-ce3" id="heJ-Y4-kw4"/>
-                        <outlet property="loginNameLabel" destination="c45-0g-gov" id="Hgw-BY-XqY"/>
-                        <outlet property="logoutButton" destination="BQ9-DW-MXr" id="uJ1-ys-dyF"/>
-                        <outlet property="nameLabel" destination="CQz-3G-HPj" id="4kp-1Q-rxE"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="izZ-wZ-buu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -233,6 +174,10 @@
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KCM-oW-ZtM" userLabel="shareButton">
                                 <rect key="frame" x="182" y="810" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="3N0-W8-E64"/>
+                                    <constraint firstAttribute="width" constant="50" id="Zaf-Q1-ATb"/>
+                                </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="shareButton"/>
                                 <connections>
@@ -266,7 +211,7 @@
         <!--Navigation Controller-->
         <scene sceneID="nXv-f6-k4t">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mRT-ys-df1" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mRT-ys-df1" customClass="NavigationController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="45r-jx-wE8"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="zcx-No-xfr">
@@ -290,9 +235,7 @@
     <resources>
         <image name="0" width="200" height="132"/>
         <image name="Backward" width="24" height="24"/>
-        <image name="Exit" width="24" height="24"/>
         <image name="like_button_on" width="42" height="42"/>
-        <image name="profile_Photo" width="70" height="70"/>
         <image name="shareButton" width="50" height="50"/>
         <image name="tab_editorial_active" width="30" height="30"/>
         <image name="tab_profile_active" width="30" height="30"/>

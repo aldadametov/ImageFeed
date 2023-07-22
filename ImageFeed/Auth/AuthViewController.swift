@@ -7,13 +7,14 @@
 
 import UIKit
 
+
 protocol AuthViewControllerDelegate: AnyObject {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
 }
 
-class AuthViewController: UIViewController {
+final class AuthViewController: UIViewController {
     
-    @IBOutlet var loginButton: UIButton!
+    @IBOutlet private weak var loginButton: UIButton!
     
     weak var delegate: AuthViewControllerDelegate?
     

@@ -97,6 +97,9 @@ extension URLRequest {
         baseURL: URL = DefaultBaseURL
     ) -> URLRequest {var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
         request.httpMethod = httpMethod
+        if let token = OAuth2TokenStorage.shared.token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         return request
         
     }
@@ -107,6 +110,7 @@ enum NetworkError: Error {
     case httpStatusCode(Int)
     case urlRequestError(Error)
     case urlSessionError
+    case invalidRequest
 }
 extension URLSession {
     func data(

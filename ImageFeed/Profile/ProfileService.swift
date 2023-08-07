@@ -19,11 +19,7 @@ final class ProfileService {
         
         currentTask?.cancel()
         
-        guard let request = makeFetchProfileRequest(token: token) else {
-            assertionFailure("Invalid request")
-            completion(.failure(NetworkError.invalidRequest))
-            return
-        }
+        let request = makeRequest(token: token)
         
         currentTask = fetch(for: request) {[weak self] response in
             self?.currentTask = nil
@@ -43,7 +39,7 @@ final class ProfileService {
         completion: @escaping (Result<ProfileResult, Error>) -> Void
     ) -> URLSessionTask {
         let decoder = JSONDecoder()
-        return urlSession.data(for: request) { (result: Result<Data, Error>) in
+        return urlSession.objectTask(for: request) { (result: Result<Data, Error>) in
             let response = result.flatMap { data -> Result<ProfileResult, Error> in
                 Result { try decoder.decode(ProfileResult.self, from: data) }
             }
@@ -52,9 +48,10 @@ final class ProfileService {
     }
     
     
-    private func makeFetchProfileRequest(token: String) -> URLRequest? {
-        URLRequest.makeHTTPRequest(path: "/me",
-                                   httpMethod: "GET",
-                                   baseURL: URL(string: "https://api.unsplash.com")!)
+    private func makeRequest(token: String) -> URLRequest {
+        guard let url = URL(string: "\(DefaultBaseURL)" + "/me") else { fatalError("Failed to create URL") }
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
     }
 }

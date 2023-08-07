@@ -12,6 +12,7 @@ final class ProfileViewController: UIViewController {
     @objc func logoutButtonTapped() {
     }
     private let profileService = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
     private let oauth2TokenStorage = OAuth2TokenStorage()
     
     @IBOutlet private lazy var profileImageView: UIImageView! = {
@@ -67,8 +68,27 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.text = profile.bio
     }
     
+    private func updateAvatar() {
+           guard
+               let profileImageURL = ProfileImageService.shared.avatarURL,
+               let url = URL(string: profileImageURL)
+           else { return }
+           // TODO [Sprint 11] Обновить аватар, используя Kingfisher
+       }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.DidChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
         
         updateProfileDetails(profile: profileService.profile!)
         

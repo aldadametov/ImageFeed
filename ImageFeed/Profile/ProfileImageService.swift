@@ -20,14 +20,21 @@ final class ProfileImageService {
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         
-        guard let request = makeRequest(userName: username) else {return}
+        let request = makeRequest(token: storageToken.token!, username: username)
         let task = fetch(for: request) {[weak self] response in
             guard let self = self else { return }
             switch response {
             case .success(let decodedObject):
-                let avatarURL = ProfileImage(decodedData: decodedObject)
-                self.avatarURL = avatarURL.profileImage["small"]
-                completion(.success(self.avatarURL!))
+                let profileImage = ProfileImage(decodedData: decodedObject)
+                self.avatarURL = profileImage.profileImage["small"]
+                if let avatarURL = self.avatarURL, !avatarURL.isEmpty {
+                    // Perform actions when avatarURL exists and is not empty
+                    print("AvatarURL: \(avatarURL)")
+                } else {
+                    // Perform actions when avatarURL is nil or empty
+                    print("AvatarURL is nil or empty.")
+                    // TODO: Perform any additional actions you need
+                }
                 NotificationCenter.default
                     .post(
                         name: ProfileImageService.DidChangeNotification,
@@ -46,7 +53,7 @@ final class ProfileImageService {
         completion: @escaping (Result<UserResult, Error>) -> Void
     ) -> URLSessionTask {
         let decoder = JSONDecoder()
-        return urlSession.data(for: request) { (result: Result<Data, Error>) in
+        return urlSession.objectTask(for: request) { (result: Result<Data, Error>) in
             let response = result.flatMap { data -> Result<UserResult, Error> in
                 Result { try decoder.decode(UserResult.self, from: data) }
             }
@@ -54,10 +61,11 @@ final class ProfileImageService {
         }
     }
     
-    private func makeRequest(userName: String) -> URLRequest? {
-        URLRequest.makeHTTPRequest(path: "users/\(userName)",
-                                   httpMethod: "GET",
-                                   baseURL: URL(string: "https://api.unsplash.com/")!)
+    private func makeRequest(token: String, username: String) -> URLRequest {
+        guard let url = URL(string: "https://api.unsplash.com" + "/users/" + username) else { fatalError("Error") }
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
     }
 }
 

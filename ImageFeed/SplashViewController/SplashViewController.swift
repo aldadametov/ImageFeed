@@ -81,16 +81,29 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch result {
             case .success:
-                guard let username = self.profileService.profile?.username else { return }
-                self.profileImageService.fetchProfileImageURL(username: username)  { _ in }
+                guard let username = profileService.profile?.username else { return }
+                profileImageService.fetchProfileImageURL(username: username)  { _ in }
                 DispatchQueue.main.async {
                     self.switchToTabBarController()
+                    UIBlockingProgressHUD.dismiss()
                 }
-            case .failure:
+            case .failure(let error):
+                print(NetworkError.invalidRequest)
                 UIBlockingProgressHUD.dismiss()
-                // TODO [Sprint 11] Показать ошибку
+                self.showAlert(with: error)
                 break
             }
         }
+    }
+}
+
+extension SplashViewController {
+    private func showAlert(with error: Error) {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+        self.present(alert, animated: true, completion: nil)
     }
 }

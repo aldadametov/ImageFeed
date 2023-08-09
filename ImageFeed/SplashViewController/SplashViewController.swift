@@ -14,7 +14,9 @@ final class SplashViewController: UIViewController {
         super.viewDidAppear(animated)
 
         if let token = oauth2TokenStorage.token {
+            
             self.fetchProfile(token: token)
+            
             switchToTabBarController()
         } else {
             // Show Auth Screen
@@ -68,9 +70,9 @@ extension SplashViewController: AuthViewControllerDelegate {
             switch result {
             case .success(let token):
                 self.fetchProfile(token: token)
-            case .failure:
+            case .failure(let error):
                 UIBlockingProgressHUD.dismiss()
-                // TODO [Sprint 11] Показать ошибку
+                self.showAlert(with: error)
                 break
             }
         }
@@ -81,8 +83,8 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch result {
             case .success:
-                guard let username = profileService.profile?.username else { return }
-                profileImageService.fetchProfileImageURL(username: username)  { _ in }
+                guard let username = self.profileService.profile?.username else { return }
+                self.profileImageService.fetchProfileImageURL(username: username)  { _ in }
                 DispatchQueue.main.async {
                     self.switchToTabBarController()
                     UIBlockingProgressHUD.dismiss()

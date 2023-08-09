@@ -20,27 +20,21 @@ final class ProfileImageService {
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         
+        
         let request = makeRequest(token: storageToken.token!, username: username)
         let task = fetch(for: request) {[weak self] response in
             guard let self = self else { return }
             switch response {
             case .success(let decodedObject):
                 let profileImage = ProfileImage(decodedData: decodedObject)
-                self.avatarURL = profileImage.profileImage["small"]
-                if let avatarURL = self.avatarURL, !avatarURL.isEmpty {
-                    // Perform actions when avatarURL exists and is not empty
-                    print("AvatarURL: \(avatarURL)")
-                } else {
-                    // Perform actions when avatarURL is nil or empty
-                    print("AvatarURL is nil or empty.")
-                    // TODO: Perform any additional actions you need
-                }
+                self.avatarURL = profileImage.profileImage["medium"]
                 NotificationCenter.default
                     .post(
                         name: ProfileImageService.DidChangeNotification,
                         object: self,
                         userInfo: ["URL": self.avatarURL ?? ""])
             case .failure(let error):
+                print("Ошибка при получении данных профиля: \(error)")
                 completion( .failure(error))
             }
         }
@@ -67,5 +61,9 @@ final class ProfileImageService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
+    
+    func resetAvatarURL() {
+            avatarURL = nil
+        }
 }
 

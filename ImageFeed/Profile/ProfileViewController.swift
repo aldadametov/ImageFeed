@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
     @objc func logoutButtonTapped() {
     }
     private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     private let oauth2TokenStorage = OAuth2TokenStorage()
     
@@ -69,15 +71,34 @@ final class ProfileViewController: UIViewController {
     }
     
     private func updateAvatar() {
-           guard
-               let profileImageURL = ProfileImageService.shared.avatarURL,
-               let url = URL(string: profileImageURL)
-           else { return }
-           // TODO [Sprint 11] Обновить аватар, используя Kingfisher
-       }
+        guard
+            let profileImageURL = profileImageService.avatarURL,
+            let url = URL(string: profileImageURL)
+                
+        else {
+            return
+        }
+        let cache = ImageCache.default
+        cache.clearDiskCache()
+        cache.clearMemoryCache()
+        let processor = RoundCornerImageProcessor(cornerRadius: profileImageView.frame.width)
+        profileImageView.kf.indicatorType = .activity
+        profileImageView.kf.setImage(with: url,
+                                     placeholder: UIImage(named: "person.crop.circle.fill.png"),
+                                     options: [.processor(processor),.cacheSerializer(FormatIndicatedCacheSerializer.png)])
+        
+    }
+    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guard let profile = profileService.profile else {
+            assertionFailure("no saved profile")
+            return
+        }
+        profileImageService.fetchProfileImageURL(username: profile.username) {_ in}
         
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
@@ -90,7 +111,7 @@ final class ProfileViewController: UIViewController {
             }
         updateAvatar()
         
-        updateProfileDetails(profile: profileService.profile!)
+        updateProfileDetails(profile: profile)
         
         view.addSubview(profileImageView)
         

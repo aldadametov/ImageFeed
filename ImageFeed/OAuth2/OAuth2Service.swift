@@ -26,6 +26,7 @@ final class OAuth2Service {
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private var lastCode: String?
+    private let oauth2TokenStorage = OAuth2TokenStorage()
     private (set) var authToken: String? {
         get {
             return OAuth2TokenStorage().token
@@ -33,6 +34,9 @@ final class OAuth2Service {
         set {
             OAuth2TokenStorage().token = newValue
         }
+    }
+    var isAuthenticated: Bool {
+        oauth2TokenStorage.token != nil
     }
     
     func fetchOAuthToken(

@@ -86,10 +86,7 @@ final class ProfileViewController: UIViewController {
         profileImageView.kf.setImage(with: url,
                                      placeholder: UIImage(named: "person.crop.circle.fill.png"),
                                      options: [.processor(processor),.cacheSerializer(FormatIndicatedCacheSerializer.png)])
-        
     }
-    
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,6 +142,11 @@ final class ProfileViewController: UIViewController {
         logoutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55).isActive = true
         logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         logoutButton.leadingAnchor.constraint(greaterThanOrEqualTo: profileImageView.leadingAnchor, constant: 0).isActive = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.backgroundColor = UIColor(hex: 0x1A1B22)
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {

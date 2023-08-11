@@ -47,7 +47,6 @@ final class ProfileService {
         }
     }
     
-    
     private func makeRequest(token: String) -> URLRequest {
         guard let url = URL(string: "\(DefaultBaseURL)" + "/me") else { fatalError("Failed to create URL") }
         var request = URLRequest(url: url)

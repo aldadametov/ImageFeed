@@ -22,7 +22,6 @@ struct ProfileResult: Codable {
     }
 }
 
-
 struct UserResult: Codable {
     let profileImage: [String:String]
     

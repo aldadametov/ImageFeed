@@ -30,6 +30,8 @@
 		036A9CD22A3F151A004C1D99 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036A9CD12A3F151A004C1D99 /* ProfileViewController.swift */; };
 		036C681F2A82D9A200A38E69 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 036C681E2A82D9A200A38E69 /* Kingfisher */; };
 		036C68222A86702900A38E69 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 036C68212A86702900A38E69 /* SwiftKeychainWrapper */; };
+		036C68242A86785600A38E69 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C68232A86785600A38E69 /* TabBarController.swift */; };
+		036C68272A86919400A38E69 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036C68262A86919400A38E69 /* AlertPresenter.swift */; };
 		038D727F2A33B73800133FE0 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038D727E2A33B73800133FE0 /* ImagesListCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +58,8 @@
 		034EBF332A2FAA64003073E0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		034EBF352A2FAA64003073E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		036A9CD12A3F151A004C1D99 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		036C68232A86785600A38E69 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		036C68262A86919400A38E69 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		038D727E2A33B73800133FE0 /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -126,22 +130,24 @@
 		034EBF262A2FAA63003073E0 /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
+				03198BE82A5F45E900955FF7 /* Auth */,
+				03198BF32A67346800955FF7 /* OAuth2 */,
+				03198BF42A6734D200955FF7 /* SplashViewController */,
+				036C68252A86787400A38E69 /* TabBar */,
+				036A9CD02A3F1500004C1D99 /* Profile */,
+				038D72802A33B76400133FE0 /* ImagesList */,
+				03198BDA2A5551D100955FF7 /* SingeImage */,
+				034EBF2D2A2FAA63003073E0 /* Main.storyboard */,
+				034EBF322A2FAA64003073E0 /* LaunchScreen.storyboard */,
 				03198BE02A5848E400955FF7 /* NavigationController.swift */,
 				034EBF272A2FAA63003073E0 /* AppDelegate.swift */,
 				03198BF82A77BCF800955FF7 /* UIBlockingProgressHUD.swift */,
 				034EBF292A2FAA63003073E0 /* SceneDelegate.swift */,
 				03198BDC2A57EE5800955FF7 /* Extensions.swift */,
 				03198BE22A5C121C00955FF7 /* Constants.swift */,
-				03198BF32A67346800955FF7 /* OAuth2 */,
-				03198BE82A5F45E900955FF7 /* Auth */,
-				03198BF42A6734D200955FF7 /* SplashViewController */,
-				036A9CD02A3F1500004C1D99 /* Profile */,
-				038D72802A33B76400133FE0 /* ImagesList */,
-				03198BDA2A5551D100955FF7 /* SingeImage */,
-				034EBF2D2A2FAA63003073E0 /* Main.storyboard */,
 				034EBF302A2FAA64003073E0 /* Assets.xcassets */,
-				034EBF322A2FAA64003073E0 /* LaunchScreen.storyboard */,
 				034EBF352A2FAA64003073E0 /* Info.plist */,
+				036C68262A86919400A38E69 /* AlertPresenter.swift */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
@@ -155,6 +161,14 @@
 				03198BFE2A7EDCE800955FF7 /* ProfileImageService.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		036C68252A86787400A38E69 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				036C68232A86785600A38E69 /* TabBarController.swift */,
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 		038D72802A33B76400133FE0 /* ImagesList */ = {
@@ -257,10 +271,12 @@
 				03198BF02A668AE700955FF7 /* OAuth2TokenStorage.swift in Sources */,
 				034EBF282A2FAA63003073E0 /* AppDelegate.swift in Sources */,
 				03198BF92A77BCF800955FF7 /* UIBlockingProgressHUD.swift in Sources */,
+				036C68242A86785600A38E69 /* TabBarController.swift in Sources */,
 				03198BFD2A7A668500955FF7 /* ProfileStructures.swift in Sources */,
 				03198BD92A4F735400955FF7 /* SingleImageViewController.swift in Sources */,
 				03198BF22A672CB600955FF7 /* SplashViewController.swift in Sources */,
 				034EBF2A2A2FAA63003073E0 /* SceneDelegate.swift in Sources */,
+				036C68272A86919400A38E69 /* AlertPresenter.swift in Sources */,
 				03198BDD2A57EE5800955FF7 /* Extensions.swift in Sources */,
 				03198BFF2A7EDCE800955FF7 /* ProfileImageService.swift in Sources */,
 				03198BE72A5F42D500955FF7 /* AuthViewController.swift in Sources */,

@@ -17,7 +17,7 @@ final class ProfileViewController: UIViewController {
     private var profileImageServiceObserver: NSObjectProtocol?
     private let oauth2TokenStorage = OAuth2TokenStorage()
     
-    @IBOutlet private lazy var profileImageView: UIImageView! = {
+    private lazy var profileImageView: UIImageView = {
         let profileImage = UIImage(named: "profile_Photo")
         let avatarImageView = UIImageView(image: profileImage)
         avatarImageView.tintColor = .gray
@@ -25,7 +25,7 @@ final class ProfileViewController: UIViewController {
         return avatarImageView
     }()
     
-    @IBOutlet private lazy var nameLabel: UILabel! = {
+    private lazy var nameLabel: UILabel = {
         let label = UILabel()
         label.text = "Екатерина Новикова"
         label.font = .boldSystemFont(ofSize: 23)
@@ -34,7 +34,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    @IBOutlet private lazy var loginNameLabel: UILabel! = {
+    private lazy var loginNameLabel: UILabel = {
         let loginNameLabel = UILabel()
         loginNameLabel.text = "@ekaterina_nov"
         loginNameLabel.font = .systemFont(ofSize: 13)
@@ -43,7 +43,7 @@ final class ProfileViewController: UIViewController {
         return loginNameLabel
     }()
     
-    @IBOutlet private lazy var descriptionLabel: UILabel! = {
+    private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Hello, world!"
         label.font = .systemFont(ofSize: 13)
@@ -52,7 +52,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    @IBOutlet private lazy var logoutButton: UIButton! = {
+    private lazy var logoutButton: UIButton = {
         let button = UIButton.systemButton(
             with: UIImage(named: "logout_button")!,
             target: self,
@@ -88,6 +88,38 @@ final class ProfileViewController: UIViewController {
                                      options: [.processor(processor),.cacheSerializer(FormatIndicatedCacheSerializer.png)])
     }
     
+    private func addSubViews(){
+        view.addSubview(profileImageView)
+        view.addSubview(nameLabel)
+        view.addSubview(loginNameLabel)
+        view.addSubview(descriptionLabel)
+        view.addSubview(logoutButton)
+        
+    }
+    
+    private func setupConstraints() {
+        profileImageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
+        profileImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
+        
+        nameLabel.leadingAnchor.constraint(equalTo: profileImageView.leadingAnchor).isActive = true
+        nameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8).isActive = true
+        nameLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 16).isActive = true
+        
+        loginNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8).isActive = true
+        loginNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor).isActive = true
+        loginNameLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor).isActive = true
+        
+        descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8).isActive = true
+        descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor).isActive = true
+        descriptionLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor).isActive = true
+        
+        logoutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55).isActive = true
+        logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        logoutButton.leadingAnchor.constraint(greaterThanOrEqualTo: profileImageView.leadingAnchor, constant: 0).isActive = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -96,10 +128,9 @@ final class ProfileViewController: UIViewController {
             return
         }
         profileImageService.fetchProfileImageURL(username: profile.username) {_ in}
-        
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
-                forName: ProfileImageService.DidChangeNotification,
+                forName: ProfileImageService.didChangeNotification,
                 object: nil,
                 queue: .main
             ) { [weak self] _ in
@@ -107,41 +138,10 @@ final class ProfileViewController: UIViewController {
                 self.updateAvatar()
             }
         updateAvatar()
-        
         updateProfileDetails(profile: profile)
-        
-        view.addSubview(profileImageView)
-        
-        profileImageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        profileImageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
-        profileImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16).isActive = true
-        
-        view.addSubview(nameLabel)
-        
-        nameLabel.leadingAnchor.constraint(equalTo: profileImageView.leadingAnchor).isActive = true
-        nameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8).isActive = true
-        nameLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 16).isActive = true
-        
-        view.addSubview(loginNameLabel)
-        
-        loginNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8).isActive = true
-        loginNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor).isActive = true
-        loginNameLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor).isActive = true
-        
+        addSubViews()
+        setupConstraints()
        
-        view.addSubview(descriptionLabel)
-        
-        descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8).isActive = true
-        descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor).isActive = true
-        descriptionLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor).isActive = true
-        
-       
-        view.addSubview(logoutButton)
-        
-        logoutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 55).isActive = true
-        logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
-        logoutButton.leadingAnchor.constraint(greaterThanOrEqualTo: profileImageView.leadingAnchor, constant: 0).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {

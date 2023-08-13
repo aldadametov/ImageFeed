@@ -24,7 +24,9 @@ final class OAuth2Service {
     
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
-    
+    private var task: URLSessionTask?
+    private var lastCode: String?
+    private let oauth2TokenStorage = OAuth2TokenStorage()
     private (set) var authToken: String? {
         get {
             return OAuth2TokenStorage().token
@@ -33,23 +35,35 @@ final class OAuth2Service {
             OAuth2TokenStorage().token = newValue
         }
     }
+    var isAuthenticated: Bool {
+        oauth2TokenStorage.token != nil
+    }
     
     func fetchOAuthToken(
         _ code: String,
         completion: @escaping (Result<String, Error>) -> Void ){
+            assert(Thread.isMainThread)
+            if lastCode == code {return}
+            task?.cancel()
+            lastCode = code
             let request = authTokenRequest(code: code)
             let task = object(for: request) { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success(let body):
-                    let authToken = body.accessToken
-                    self.authToken = authToken
-                    completion(.success(authToken))
-                case .failure(let error):
-                    completion(.failure(error))
-                } }
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(let body):
+                        let authToken = body.accessToken
+                        self.authToken = authToken
+                        completion(.success(authToken))
+                        self.task = nil
+                    case .failure(let error):
+                        completion(.failure(error))
+                        self.lastCode = nil
+                    }
+                }
+            }
+            self.task = task
             task.resume()
-            
         }
 }
 
@@ -59,7 +73,8 @@ extension OAuth2Service {
         completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void
     ) -> URLSessionTask {
         let decoder = JSONDecoder()
-        return urlSession.data(for: request) { (result: Result<Data, Error>) in
+        let session = URLSession.shared
+        return session.objectTask(for: request) { (result: Result<Data, Error>) in
             let response = result.flatMap { data -> Result<OAuthTokenResponseBody, Error> in
                 Result { try decoder.decode(OAuthTokenResponseBody.self, from: data) }
             }
@@ -87,6 +102,9 @@ extension URLRequest {
         baseURL: URL = DefaultBaseURL
     ) -> URLRequest {var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
         request.httpMethod = httpMethod
+        if let token = OAuth2TokenStorage.shared.token {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
         return request
         
     }
@@ -97,13 +115,14 @@ enum NetworkError: Error {
     case httpStatusCode(Int)
     case urlRequestError(Error)
     case urlSessionError
+    case invalidRequest
 }
 extension URLSession {
-    func data(
-        for request: URLRequest,
-        completion: @escaping (Result<Data, Error>) -> Void
-    ) -> URLSessionTask {
-        let fulfillCompletion: (Result<Data, Error>) -> Void = { result in
+    func objectTask<T: Decodable>(
+            for request: URLRequest,
+            completion: @escaping (Result<T, Error>) -> Void
+        ) -> URLSessionTask {
+        let fulfillCompletion: (Result<T, Error>) -> Void = { result in
             DispatchQueue.main.async {
                 completion(result)
             }
@@ -114,7 +133,7 @@ extension URLSession {
                let statusCode = (response as? HTTPURLResponse)?.statusCode
             {
                 if 200 ..< 300 ~= statusCode {
-                    fulfillCompletion(.success(data))
+                    fulfillCompletion(.success(data as! T))
                 } else {
                     fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
                 }

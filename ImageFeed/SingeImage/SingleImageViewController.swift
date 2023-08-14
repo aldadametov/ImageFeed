@@ -9,11 +9,10 @@ import UIKit
 
 class SingleImageViewController: UIViewController {
     
-    var image: UIImage! {
+    var imageURL: URL! {
         didSet {
-            guard isViewLoaded else { return } // 1
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)// 2
+            guard isViewLoaded else { return }
+            imageView.kf.setImage(with: imageURL)
         }
     }
     
@@ -22,7 +21,7 @@ class SingleImageViewController: UIViewController {
     }
     @IBAction private func didTapShareButton(_ sender: UIButton) {
         let share = UIActivityViewController(
-            activityItems: [image as Any],
+            activityItems: [imageURL as Any],
             applicationActivities: nil
         )
         present(share, animated: true, completion: nil)
@@ -50,8 +49,8 @@ class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView.image = image
-        rescaleAndCenterImageInScrollView(image: image)
+        imageView.kf.setImage(with: imageURL)
+        rescaleAndCenterImageInScrollView(image: imageView.image ?? UIImage()) // Здесь используем imageView.image, так как мы устанавливаем изображение с помощью Kingfisher
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
     }

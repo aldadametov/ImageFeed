@@ -36,7 +36,7 @@ final class ImagesListService {
         return request
     }
 
-    private func fetchPhotosNextPage() {
+    func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
 
         guard currentTask == nil else {
@@ -75,15 +75,20 @@ final class ImagesListService {
         self.currentTask = task
         task.resume()
     }
-
-
     
-    private func fetch<T: Decodable>(
+    private func fetch(
         for request: URLRequest,
-        completion: @escaping (Result<T, Error>) -> Void
+        completion: @escaping (Result<[PhotoResult], Error>) -> Void
     ) -> URLSessionTask {
-        return urlSession.objectTask(for: request, completion: completion)
+        let decoder = JSONDecoder()
+        return urlSession.objectTask(for: request) { (result: Result<Data, Error>) in
+            let response = result.flatMap { data -> Result<[PhotoResult], Error> in
+                Result { try decoder.decode([PhotoResult].self, from: data) }
+            }
+            completion(response)
+        }
     }
+    
 }
 
 

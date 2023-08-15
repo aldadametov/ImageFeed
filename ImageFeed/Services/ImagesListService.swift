@@ -89,6 +89,47 @@ final class ImagesListService {
         }
     }
     
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, NetworkError>) -> Void) {
+        let urlString = "https://api.unsplash.com/photos/\(photoId)/like"
+        guard let url = URL(string: urlString) else {
+            completion(.failure(.invalidRequest))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = isLike ? "POST" : "DELETE"
+        request.setValue("Bearer \(storage.token!)", forHTTPHeaderField: "Authorization")
+        
+        let task = urlSession.dataTask(with: request) { (_, response, error) in
+            if let error = error {
+                completion(.failure(.urlSessionError))
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if (200..<300).contains(httpResponse.statusCode) {
+                    // Обновление состояния "лайка" в массиве photos
+                    if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
+                        var photo = self.photos[index]
+                        photo.isLiked = !photo.isLiked
+                        self.photos[index] = photo
+                    }
+                    
+                    completion(.success(()))
+                } else {
+                    completion(.failure(.httpStatusCode(httpResponse.statusCode)))
+                }
+            } else {
+                completion(.failure(.unknown))
+            }
+        }
+        
+        task.resume()
+    }
+
+
+
+     
 }
 
 
@@ -135,7 +176,7 @@ struct Photo {
     let welcomeDescription: String?
     let thumbImageURL: String
     let largeImageURL: String
-    let isLiked: Bool
+    var isLiked: Bool
     
     init(from photoResult: PhotoResult) {
         id = photoResult.id

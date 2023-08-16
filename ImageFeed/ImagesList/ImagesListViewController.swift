@@ -56,19 +56,6 @@ final class ImagesListViewController: UIViewController {
 }
 
 extension ImagesListViewController {
-//    private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-//        guard let image = UIImage(named: photosName[indexPath.row]) else {
-//            return
-//        }
-//
-//        cell.cellImage.image = image
-//        cell.dateLabel.text = dateFormatter.string(from: Date())
-//
-//        let isLiked = indexPath.row % 2 == 0
-//        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-//        cell.likeButton.setImage(likeImage, for: .normal)
-//    }
-    
     func updateTableViewAnimated() {
         DispatchQueue.main.async {
             let oldCount = self.photos.count

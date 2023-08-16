@@ -2,7 +2,6 @@ import UIKit
 import ProgressHUD
 
 final class SplashViewController: UIViewController {
-    
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
@@ -40,7 +39,7 @@ final class SplashViewController: UIViewController {
         super.viewDidDisappear(animated)
     }
     
-    private func showAuthController() {
+    func showAuthController() {
         let viewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(identifier: "AuthViewControllerID")
         guard let authViewController = viewController as? AuthViewController else { return }
         authViewController.delegate = self

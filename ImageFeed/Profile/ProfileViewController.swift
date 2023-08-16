@@ -7,10 +7,25 @@
 
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     
     @objc func logoutButtonTapped() {
+        ProfileImageService.shared.resetAvatarURL()
+        ProfileService.shared.resetProfile()
+        oauth2TokenStorage.resetToken()
+        ProfileViewController.clean()
+
+        DispatchQueue.main.async { // Оборачиваем код в блок для выполнения на главном потоке
+            guard let window = UIApplication.shared.windows.first else {
+                assertionFailure("Invalid configuration")
+                return
+            }
+            
+            window.rootViewController = SplashViewController()
+            window.makeKeyAndVisible()
+        }
     }
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
@@ -151,5 +166,17 @@ final class ProfileViewController: UIViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
+    }
+    
+    static func clean() {
+       // Очищаем все куки из хранилища.
+       HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+       // Запрашиваем все данные из локального хранилища.
+       WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+          // Массив полученных записей удаляем из хранилища.
+          records.forEach { record in
+             WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+          }
+       }
     }
 }

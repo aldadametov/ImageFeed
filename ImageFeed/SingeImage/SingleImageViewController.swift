@@ -9,6 +9,7 @@ import UIKit
 
 class SingleImageViewController: UIViewController {
     
+    private let alertPresenter = AlertPresenter()
     var imageURL: URL! {
         didSet {
             guard isViewLoaded else { return }
@@ -49,14 +50,55 @@ class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView.kf.setImage(with: imageURL)
-        rescaleAndCenterImageInScrollView(image: imageView.image ?? UIImage()) // Здесь используем imageView.image, так как мы устанавливаем изображение с помощью Kingfisher
+        UIBlockingProgressHUD.show()
+
+        imageView.kf.setImage(with: imageURL) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                self.alertPresenter.showAlert(
+                            title: "Ошибка",
+                            message: "Что-то пошло не так. Попробовать ещё раз?",
+                            handler: {
+                                self.loadFullImage()
+                            }
+                        )
+            }
+            
+            // Уберём лоадер
+            UIBlockingProgressHUD.dismiss()
+        }
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
+    }
+    
+    func loadFullImage() {
+        UIBlockingProgressHUD.show()
+        imageView.kf.setImage(with: imageURL) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                self.alertPresenter.showAlert(
+                    title: "Ошибка",
+                    message: "Что-то пошло не так. Попробовать ещё раз?",
+                    handler: {
+                        self.loadFullImage()
+                    }
+                )
+            }
+            
+            UIBlockingProgressHUD.dismiss()
+        }
     }
 }
 

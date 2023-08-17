@@ -28,12 +28,10 @@ final class ImagesListCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Инициализация ячейки
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         cellImage.kf.cancelDownloadTask()
-        // Очищение ячейки перед повторным использованием
     }
 }

@@ -22,45 +22,37 @@ final class ImagesListService {
         guard var urlComponents = URLComponents(string: "https://api.unsplash.com/photos") else {
             fatalError("Error creating URL components")
         }
-
+        
         urlComponents.queryItems = [
             URLQueryItem(name: "page", value: "\(page)"),
         ]
-
+        
         guard let url = urlComponents.url else {
             fatalError("Error creating URL")
         }
-
+        
         var request = URLRequest(url: url)
         request.setValue("Bearer \(storage.token!)", forHTTPHeaderField: "Authorization")
         return request
     }
-
+    
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
-
+        
         guard currentTask == nil else {
-            // Закачка уже идет, прерываем выполнение функции
             return
         }
-
+        
         let nextPage = (lastLoadedPage ?? 0) + 1
         let request = makeRequest(page: nextPage)
         let task = fetch(for: request) { [weak self] (response: Result<[PhotoResult], Error>) in
             guard let self = self else { return }
-
-            // Убираем блокировку, т.к. запрос завершен
             self.currentTask = nil
-
             switch response {
             case .success(let photoResults):
                 let newPhotos = photoResults.map { Photo(from: $0) }
                 self.photos.append(contentsOf: newPhotos)
-
-                // Обновляем lastLoadedPage
                 self.lastLoadedPage = nextPage
-
-                // Оповещаем об изменениях
                 NotificationCenter.default.post(
                     name: ImagesListService.DidChangeNotification,
                     object: self,
@@ -70,8 +62,6 @@ final class ImagesListService {
                 print("Ошибка при получении фотографий: \(error)")
             }
         }
-
-        // Устанавливаем текущую задачу
         self.currentTask = task
         task.resume()
     }
@@ -126,10 +116,10 @@ final class ImagesListService {
         
         task.resume()
     }
-
-
-
-     
+    
+    
+    
+    
 }
 
 
@@ -139,7 +129,7 @@ struct UrlsResult: Codable {
     let regular: String
     let small: String
     let thumb: String
-
+    
     enum CodingKeys: String, CodingKey {
         case raw = "raw"
         case full = "full"
@@ -182,9 +172,8 @@ struct Photo {
         id = photoResult.id
         size = CGSize(width: photoResult.width, height: photoResult.height)
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        createdAt = dateFormatter.date(from: photoResult.createdAt)
+        let isoDateFormatter = ISO8601DateFormatter()
+        createdAt = isoDateFormatter.date(from: photoResult.createdAt)
         
         welcomeDescription = photoResult.description
         thumbImageURL = photoResult.urls.thumb
@@ -192,4 +181,5 @@ struct Photo {
         isLiked = photoResult.likedByUser
     }
 }
+
 

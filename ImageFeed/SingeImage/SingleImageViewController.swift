@@ -52,7 +52,9 @@ class SingleImageViewController: UIViewController {
         super.viewDidLoad()
         UIBlockingProgressHUD.show()
 
-        imageView.kf.setImage(with: imageURL) { [weak self] result in
+        let placeholderImage = UIImage(named: "placeholder_image")
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(with: imageURL, placeholder: placeholderImage) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
@@ -67,13 +69,12 @@ class SingleImageViewController: UIViewController {
                             }
                         )
             }
-            
-            // Уберём лоадер
             UIBlockingProgressHUD.dismiss()
         }
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
     }
+
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent

@@ -12,21 +12,42 @@ import WebKit
 final class ProfileViewController: UIViewController {
     
     @objc func logoutButtonTapped() {
+        let alertController = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены что хотите выйти?",
+            preferredStyle: .alert
+        )
+        
+        let yesAction = UIAlertAction(title: "Да", style: .destructive) { [weak self] _ in
+            self?.performLogout()
+        }
+        
+        let noAction = UIAlertAction(title: "Нет", style: .default, handler: nil)
+        
+        alertController.addAction(yesAction)
+        alertController.addAction(noAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    private func performLogout() {
         ProfileImageService.shared.resetAvatarURL()
         ProfileService.shared.resetProfile()
         oauth2TokenStorage.resetToken()
         ProfileViewController.clean()
-
-        DispatchQueue.main.async { // Оборачиваем код в блок для выполнения на главном потоке
+        
+        DispatchQueue.main.async {
             guard let window = UIApplication.shared.windows.first else {
                 assertionFailure("Invalid configuration")
                 return
             }
             
-            window.rootViewController = SplashViewController()
+            let splashViewController = SplashViewController()
+            window.rootViewController = splashViewController
             window.makeKeyAndVisible()
         }
     }
+    
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -156,7 +177,7 @@ final class ProfileViewController: UIViewController {
         updateProfileDetails(profile: profile)
         addSubViews()
         setupConstraints()
-       
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -169,14 +190,11 @@ final class ProfileViewController: UIViewController {
     }
     
     static func clean() {
-       // Очищаем все куки из хранилища.
-       HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-       // Запрашиваем все данные из локального хранилища.
-       WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-          // Массив полученных записей удаляем из хранилища.
-          records.forEach { record in
-             WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-          }
-       }
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        }
     }
 }

@@ -15,8 +15,11 @@ final class ImagesListService {
     private let urlSession = URLSession.shared
     private var currentTask: URLSessionTask?
     static let DidChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
-    
     private var lastLoadedPage: Int?
+    private lazy var isoDateFormatter: ISO8601DateFormatter = {
+            let formatter = ISO8601DateFormatter()
+            return formatter
+        }()
     
     private func makeRequest(page: Int) -> URLRequest {
         guard var urlComponents = URLComponents(string: "https://api.unsplash.com/photos") else {
@@ -50,7 +53,7 @@ final class ImagesListService {
             self.currentTask = nil
             switch response {
             case .success(let photoResults):
-                let newPhotos = photoResults.map { Photo(from: $0) }
+                let newPhotos = photoResults.map { Photo(from: $0, isoDateFormatter: self.isoDateFormatter) }
                 self.photos.append(contentsOf: newPhotos)
                 self.lastLoadedPage = nextPage
                 NotificationCenter.default.post(
@@ -168,11 +171,10 @@ struct Photo {
     let largeImageURL: String
     var isLiked: Bool
     
-    init(from photoResult: PhotoResult) {
+    init(from photoResult: PhotoResult, isoDateFormatter: ISO8601DateFormatter) {
         id = photoResult.id
         size = CGSize(width: photoResult.width, height: photoResult.height)
         
-        let isoDateFormatter = ISO8601DateFormatter()
         createdAt = isoDateFormatter.date(from: photoResult.createdAt)
         
         welcomeDescription = photoResult.description
@@ -181,5 +183,7 @@ struct Photo {
         isLiked = photoResult.likedByUser
     }
 }
+
+
 
 

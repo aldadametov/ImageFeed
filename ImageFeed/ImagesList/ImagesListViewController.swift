@@ -89,7 +89,7 @@ extension ImagesListViewController: UITableViewDataSource {
         if let createdAt = photo.createdAt {
             cell.dateLabel.text = dateFormatter.string(from: createdAt)
         } else {
-            cell.dateLabel.text = "No Date Available"
+            cell.dateLabel.text = ""
         }
         cell.likeButton.setImage(photo.isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off"), for: .normal)
         
@@ -136,22 +136,22 @@ extension ImagesListViewController: ImagesListCellDelegate {
         imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
             guard let self = self else { return }
             
-            switch result {
-            case .success:
-                self.photos = self.imagesListService.photos
-                DispatchQueue.main.async {
+            DispatchQueue.main.async { // Выполняем изменения UI в главном потоке
+                switch result {
+                case .success:
+                    self.photos = self.imagesListService.photos
                     cell.setIsLiked(self.photos[indexPath.row].isLiked)
+                    UIBlockingProgressHUD.dismiss()
+                case .failure:
+                    UIBlockingProgressHUD.dismiss()
+                    let alert = UIAlertController(title: "Ошибка",
+                                                  message: "Не удалось обновить лайк. Попробуйте снова.",
+                                                  preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default)
+                    alert.addAction(okAction)
+                    
+                    self.present(alert, animated: true, completion: nil)
                 }
-                UIBlockingProgressHUD.dismiss()
-            case .failure:
-                UIBlockingProgressHUD.dismiss()
-                let alert = UIAlertController(title: "Ошибка",
-                                              message: "Не удалось обновить лайк. Попробуйте снова.",
-                                              preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default)
-                alert.addAction(okAction)
-                
-                self.present(alert, animated: true, completion: nil)
             }
         }
     }

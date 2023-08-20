@@ -2,16 +2,18 @@ import UIKit
 import ProgressHUD
 
 final class SplashViewController: UIViewController {
-    
     private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     private let alertPresenter = AlertPresenter()
-    private var splashScreenLogoImageView: UIImageView!
-    
-
-    
+    private lazy var splashScreenLogoImageView: UIImageView = {
+        let splashScreenLogo = UIImage(named: "splash_screen_logo")
+        let splashScreenLogoView = UIImageView(image: splashScreenLogo)
+        splashScreenLogoView.translatesAutoresizingMaskIntoConstraints = false
+        return splashScreenLogoView
+    }()
+        
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let token = oauth2TokenStorage.token {
@@ -25,11 +27,7 @@ final class SplashViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         view.backgroundColor = UIColor(hex: 0x1A1B22)
-        
-        splashScreenLogoImageView = UIImageView()
-        splashScreenLogoImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(splashScreenLogoImageView)
-        splashScreenLogoImageView.image = UIImage(named: "splash_screen_logo")
         
         NSLayoutConstraint.activate([
             splashScreenLogoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -41,7 +39,7 @@ final class SplashViewController: UIViewController {
         super.viewDidDisappear(animated)
     }
     
-    private func showAuthController() {
+    func showAuthController() {
         let viewController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(identifier: "AuthViewControllerID")
         guard let authViewController = viewController as? AuthViewController else { return }
         authViewController.delegate = self

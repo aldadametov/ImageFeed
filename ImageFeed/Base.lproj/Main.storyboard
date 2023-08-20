@@ -65,6 +65,9 @@
                                                     <rect key="frame" x="356" y="4" width="42" height="42"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" image="like_button_on"/>
+                                                    <connections>
+                                                        <action selector="likeButtonClicked:" destination="F8w-3I-fFV" eventType="touchUpInside" id="IPW-S8-NOU"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>

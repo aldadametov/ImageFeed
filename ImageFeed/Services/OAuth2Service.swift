@@ -116,7 +116,24 @@ enum NetworkError: Error {
     case urlRequestError(Error)
     case urlSessionError
     case invalidRequest
+    case unknown
+    
+    var localizedDescription: String {
+        switch self {
+        case .httpStatusCode(let statusCode):
+            return HTTPURLResponse.localizedString(forStatusCode: statusCode)
+        case .urlRequestError(let error):
+            return "URL request error: \(error.localizedDescription)"
+        case .invalidRequest:
+            return "Invalid request"
+        case .unknown:
+            return "Unknown error"
+        case .urlSessionError:
+            return "urlSession error"
+        }
+    }
 }
+
 extension URLSession {
     func objectTask<T: Decodable>(
             for request: URLRequest,

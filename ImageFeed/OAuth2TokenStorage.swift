@@ -27,4 +27,8 @@ final class OAuth2TokenStorage {
             }
         }
     }
+    
+    func resetToken() {
+        let removeSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: "OAuth2AccessToken")
+    }
 }

@@ -9,11 +9,11 @@ import UIKit
 
 class SingleImageViewController: UIViewController {
     
-    var image: UIImage! {
+    private let alertPresenter = AlertPresenter()
+    var imageURL: URL! {
         didSet {
-            guard isViewLoaded else { return } // 1
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)// 2
+            guard isViewLoaded else { return }
+            imageView.kf.setImage(with: imageURL)
         }
     }
     
@@ -22,7 +22,7 @@ class SingleImageViewController: UIViewController {
     }
     @IBAction private func didTapShareButton(_ sender: UIButton) {
         let share = UIActivityViewController(
-            activityItems: [image as Any],
+            activityItems: [imageURL as Any],
             applicationActivities: nil
         )
         present(share, animated: true, completion: nil)
@@ -50,14 +50,56 @@ class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView.image = image
-        rescaleAndCenterImageInScrollView(image: image)
+        UIBlockingProgressHUD.show()
+
+        let placeholderImage = UIImage(named: "placeholder_image")
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(with: imageURL, placeholder: placeholderImage) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                self.alertPresenter.showAlert(
+                            title: "Ошибка",
+                            message: "Что-то пошло не так. Попробовать ещё раз?",
+                            handler: {
+                                self.loadFullImage()
+                            }
+                        )
+            }
+            UIBlockingProgressHUD.dismiss()
+        }
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
     }
+
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
+    }
+    
+    func loadFullImage() {
+        UIBlockingProgressHUD.show()
+        imageView.kf.setImage(with: imageURL) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+            case .failure:
+                self.alertPresenter.showAlert(
+                    title: "Ошибка",
+                    message: "Что-то пошло не так. Попробовать ещё раз?",
+                    handler: {
+                        self.loadFullImage()
+                    }
+                )
+            }
+            
+            UIBlockingProgressHUD.dismiss()
+        }
     }
 }
 

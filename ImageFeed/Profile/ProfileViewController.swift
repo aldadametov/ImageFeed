@@ -7,9 +7,15 @@
 
 import UIKit
 import Kingfisher
-import WebKit
 
-final class ProfileViewController: UIViewController {
+protocol ProfileViewControllerProtocol: AnyObject {
+    func updateAvatar()
+    func updateProfileDetails(profile: Profile?)
+}
+
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
+    
+    lazy var presenter: ProfilePresenterProtocol = ProfileViewPresenter(view: self)
     
     @objc func logoutButtonTapped() {
         let alertController = UIAlertController(
@@ -33,8 +39,7 @@ final class ProfileViewController: UIViewController {
     private func performLogout() {
         ProfileImageService.shared.resetAvatarURL()
         ProfileService.shared.resetProfile()
-        oauth2TokenStorage.resetToken()
-        ProfileViewController.clean()
+        presenter.clean()
         
         DispatchQueue.main.async {
             guard let window = UIApplication.shared.windows.first else {
@@ -50,8 +55,6 @@ final class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
-    private var profileImageServiceObserver: NSObjectProtocol?
-    private let oauth2TokenStorage = OAuth2TokenStorage()
     
     private lazy var profileImageView: UIImageView = {
         let profileImage = UIImage(named: "profile_Photo")
@@ -99,18 +102,17 @@ final class ProfileViewController: UIViewController {
         return button
     }()
     
-    private func updateProfileDetails(profile: Profile) {
+    internal func updateProfileDetails(profile: Profile?) {
         guard let profile = profileService.profile else { return }
         nameLabel.text = profile.name
         loginNameLabel.text = profile.loginName
         descriptionLabel.text = profile.bio
     }
     
-    private func updateAvatar() {
+    internal func updateAvatar() {
         guard
             let profileImageURL = profileImageService.avatarURL,
             let url = URL(string: profileImageURL)
-                
         else {
             return
         }
@@ -159,24 +161,12 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let profile = profileService.profile else {
-            assertionFailure("no saved profile")
-            return
+        if let url = ProfileImageService.shared.avatarURL {
+            updateAvatar()
         }
-        profileImageService.fetchProfileImageURL(username: profile.username) {_ in}
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-        updateAvatar()
-        updateProfileDetails(profile: profile)
         addSubViews()
         setupConstraints()
+        presenter.viewDidLoad()
         
     }
     
@@ -187,14 +177,5 @@ final class ProfileViewController: UIViewController {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
-    }
-    
-    static func clean() {
-        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-            records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-            }
-        }
     }
 }

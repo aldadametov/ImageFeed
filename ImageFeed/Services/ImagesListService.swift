@@ -8,8 +8,15 @@
 import Foundation
 import CoreGraphics
 
-final class ImagesListService {
+protocol ImagesListServiceProtocol {
+    var photos: [Photo] { get }
+    func fetchPhotosNextPage()
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, NetworkError>) -> Void)
+}
+
+final class ImagesListService: ImagesListServiceProtocol {
     static let shared = ImagesListService()
+    private init() {}
     private (set) var photos: [Photo] = []
     private let storage = OAuth2TokenStorage.shared
     private let urlSession = URLSession.shared

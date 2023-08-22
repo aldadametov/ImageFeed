@@ -10,6 +10,7 @@ import UIKit
 
 final class ProfileImageService {
     static let shared = ProfileImageService()
+    private init() {}
     private (set) var avatarURL: String?
     private let urlSession = URLSession.shared
     private var currentTask: URLSessionTask?

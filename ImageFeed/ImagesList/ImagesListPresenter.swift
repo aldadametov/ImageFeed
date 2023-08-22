@@ -58,7 +58,7 @@ class ImagesListPresenter: ImagesListPresenterProtocol {
         imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
             guard let self = self else { return }
             
-            DispatchQueue.main.async { // Выполняем изменения UI в главном потоке
+            DispatchQueue.main.async {
                 switch result {
                 case .success:
                     photo.isLiked = !photo.isLiked

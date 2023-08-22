@@ -160,7 +160,7 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        logoutButton.accessibilityIdentifier = "LogoutButton"
         if let url = ProfileImageService.shared.avatarURL {
             updateAvatar()
         }

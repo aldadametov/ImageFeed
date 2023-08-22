@@ -38,11 +38,9 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        imagesListService.fetchPhotosNextPage()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         presenter = ImagesListPresenter(view: self)
         presenter?.viewDidLoad()
-        //        NotificationCenter.default.addObserver(self, selector: #selector(imagesListDidChange(_:)), name: ImagesListService.DidChangeNotification, object: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -57,12 +55,6 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
             super.prepare(for: segue, sender: sender)
         }
     }
-    
-    //    @objc private func imagesListDidChange(_ notification: Notification) {
-    //        DispatchQueue.main.async {
-    //            self.updateTableViewAnimated()
-    //        }
-    //    }
     
     func showLikeError(_ error: Error) {
         let alert = UIAlertController(
@@ -84,26 +76,6 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
         return tableView.indexPath(for: cell)
     }
 }
-
-
-//extension ImagesListViewController {
-//    func updateTableViewAnimated() {
-//        DispatchQueue.main.async {
-//            let oldCount = self.photos.count
-//            let newCount = self.imagesListService.photos.count
-//            self.photos = self.imagesListService.photos
-//            if oldCount != newCount {
-//                self.tableView.performBatchUpdates {
-//                    let indexPaths = (oldCount..<newCount).map { i in
-//                        IndexPath(row: i, section: 0)
-//                    }
-//                    self.tableView.insertRows(at: indexPaths, with: .automatic)
-//                } completion: { _ in }
-//            }
-//        }
-//    }
-//
-//}
 
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
@@ -159,36 +131,4 @@ extension ImagesListViewController: ImagesListCellDelegate {
             return cellHeight
         }
     }
-    
-    //MARK: - ImagesListCellDelegate
-    
-    //extension ImagesListViewController: ImagesListCellDelegate {
-    //    func imageListCellDidTapLike(_ cell: ImagesListCell) {
-    //        guard let indexPath = tableView.indexPath(for: cell) else { return }
-    //        let photo = photos[indexPath.row]
-    //
-    //        UIBlockingProgressHUD.show()
-    //
-    //        imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
-    //            guard let self = self else { return }
-    //
-    //            DispatchQueue.main.async { // Выполняем изменения UI в главном потоке
-    //                switch result {
-    //                case .success:
-    //                    self.photos = self.imagesListService.photos
-    //                    cell.setIsLiked(self.photos[indexPath.row].isLiked)
-    //                    UIBlockingProgressHUD.dismiss()
-    //                case .failure:
-    //                    UIBlockingProgressHUD.dismiss()
-    //                    let alert = UIAlertController(title: "Ошибка",
-    //                                                  message: "Не удалось обновить лайк. Попробуйте снова.",
-    //                                                  preferredStyle: .alert)
-    //                    let okAction = UIAlertAction(title: "OK", style: .default)
-    //                    alert.addAction(okAction)
-    //
-    //                    self.present(alert, animated: true, completion: nil)
-    //                }
-    //            }
-    //        }
-    //    }
 
